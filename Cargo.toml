@@ -1,0 +1,17 @@
+[package]
+name = "gid"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+argh = "0.1"
+dirs = "4.0"
+google-tasks1 = "4.0"
+tokio = { version = "1.22", features = ["macros", "rt-multi-thread"] }
+base64 = "0.13"
+
+[build-dependencies]
+base64 = "0.13"
