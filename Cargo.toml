@@ -10,13 +10,14 @@ build = "build.rs"
 argh = "0.1"
 dirs = "4.0"
 google-tasks1 = "4.0"
-tokio = { version = "1.22", features = ["macros", "rt-multi-thread"] }
 base64 = "0.13"
 tabled = "0.10"
 toml = "0.5"
 colored = "2.0"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.22", features = ["full"] }
+chrono = "0.4.23"
 
 [build-dependencies]
 base64 = "0.13"

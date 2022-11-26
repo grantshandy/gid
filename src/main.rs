@@ -172,7 +172,7 @@ pub async fn get_task_id_from_name<'a>(
     list_id: &str,
     query: &str,
     methods: &TaskMethods<'a, HttpsConnector<HttpConnector>>,
-) -> Result<Option<String>> {
+) -> Result<String> {
     match methods
         .list(list_id)
         .doit()
@@ -193,8 +193,8 @@ pub async fn get_task_id_from_name<'a>(
         })
         .nth(0)
     {
-        Some(id) => Ok(Some(id)),
-        None => Ok(None),
+        Some(id) => Ok(id),
+        None => Err(Error::BadRequest(json!("task name or index doesn't exist"))),
     }
 }
 
