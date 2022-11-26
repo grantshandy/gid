@@ -15,6 +15,7 @@ use gtasks::{
 };
 use serde::Deserialize;
 use serde_json::json;
+use tabled::{Style, Table, Tabled};
 
 mod lists;
 mod tasks;
@@ -81,7 +82,7 @@ async fn main() {
 
     // config
     let config: Config = match fs::read(args.config_path) {
-        Ok(bytes) => match toml::from_slice(&bytes) {
+        Ok(bytes) => match toml::from_slice::<Config>(&bytes) {
             Ok(config) => config,
             Err(_err) => {
                 print_error("malformed config path, using default");
@@ -197,15 +198,39 @@ pub async fn get_task_id_from_name<'a>(
     }
 }
 
+pub fn get_styled_table<T: Tabled, I: IntoIterator<Item = T>>(style: &str, data: I) -> String {
+    let mut table = Table::new(data);
+
+    match style {
+        "markdown" => table.with(Style::markdown()),
+        "empty" => table.with(Style::empty()),
+        "blank" => table.with(Style::blank()),
+        "ascii" => table.with(Style::ascii()),
+        "ascii_rounded" => table.with(Style::ascii_rounded()),
+        "modern" => table.with(Style::modern()),
+        "sharp" => table.with(Style::sharp()),
+        "rounded" => table.with(Style::rounded()),
+        "extended" => table.with(Style::extended()),
+        "dots" => table.with(Style::dots()),
+        _ => table.with(Style::rounded()),
+    };
+
+    table.to_string()
+}
+
 #[derive(Deserialize)]
 pub struct Config {
+    #[serde(default)]
     pub default_list: String,
+    #[serde(default)]
+    pub table_style: String,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
             default_list: "0".to_string(),
+            table_style: "rounded".to_string(),
         }
     }
 }

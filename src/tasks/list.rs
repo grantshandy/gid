@@ -5,7 +5,9 @@ use google_tasks1::{
     hyper_rustls::HttpsConnector,
     Result,
 };
-use tabled::{Tabled, Table};
+use tabled::Tabled;
+
+use crate::{get_styled_table, Config};
 
 /// Show tasks.
 #[derive(FromArgs)]
@@ -22,6 +24,7 @@ struct Task {
 
 pub async fn list_tasks<'a>(
     _show: List,
+    config: Config,
     list_id: String,
     methods: TaskMethods<'a, HttpsConnector<HttpConnector>>,
 ) -> Result<()> {
@@ -40,9 +43,7 @@ pub async fn list_tasks<'a>(
         })
         .collect();
     
-    let table = Table::new(tasks);
-    
-    println!("{table}");
+    println!("{}", get_styled_table(&config.table_style, tasks));
 
     Ok(())
 }

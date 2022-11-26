@@ -2,7 +2,9 @@ use argh::FromArgs;
 use google_tasks1::{
     api::TasklistMethods, hyper::client::HttpConnector, hyper_rustls::HttpsConnector, Result,
 };
-use tabled::{Table, Tabled};
+use tabled::Tabled;
+
+use crate::{get_styled_table, Config};
 
 /// list all task lists
 #[derive(FromArgs)]
@@ -23,6 +25,7 @@ struct TaskList {
 
 pub async fn show_list<'a>(
     show: Show,
+    config: Config,
     methods: TasklistMethods<'a, HttpsConnector<HttpConnector>>,
 ) -> Result<()> {
     let result = methods.list();
@@ -46,9 +49,7 @@ pub async fn show_list<'a>(
         })
         .collect();
 
-    let table: Table = Table::new(items);
-
-    println!("{table}");
+    println!("{}", get_styled_table(&config.table_style, items));
 
     Ok(())
 }

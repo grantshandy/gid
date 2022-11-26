@@ -27,12 +27,12 @@ enum SubCommand {
     Show(Show),
 }
 
-pub async fn manage(_config: Config, options: Lists, hub: TasksHub<HttpsConnector<HttpConnector>>) -> Result<()> {
+pub async fn manage(config: Config, options: Lists, hub: TasksHub<HttpsConnector<HttpConnector>>) -> Result<()> {
     let methods = hub.tasklists();
 
     match options.nested {
         SubCommand::Create(options) => add::add_list(options, methods).await,
         SubCommand::Delete(options) => remove::remove_list(options, methods).await,
-        SubCommand::Show(options) => show::show_list(options, methods).await,
+        SubCommand::Show(options) => show::show_list(options, config, methods).await,
     }
 }

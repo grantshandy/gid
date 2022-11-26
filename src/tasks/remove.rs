@@ -1,9 +1,6 @@
 use argh::FromArgs;
 use google_tasks1::{
-    api::TaskMethods,
-    hyper::client::HttpConnector,
-    hyper_rustls::HttpsConnector,
-    Result, Error,
+    api::TaskMethods, hyper::client::HttpConnector, hyper_rustls::HttpsConnector, Error, Result,
 };
 use serde_json::json;
 
@@ -11,9 +8,9 @@ use serde_json::json;
 #[derive(FromArgs)]
 #[argh(subcommand, name = "remove")]
 pub struct Remove {
-    /// name or index of the task to remove
+    /// names or index of the task to remove
     #[argh(positional)]
-    name: String,
+    names: Vec<String>,
 }
 
 pub async fn remove_task<'a>(
@@ -21,13 +18,20 @@ pub async fn remove_task<'a>(
     list_id: String,
     methods: TaskMethods<'a, HttpsConnector<HttpConnector>>,
 ) -> Result<()> {
-    let task_id = match
-        crate::get_task_id_from_name(&list_id, &options.name, &methods).await? {
+    let mut task_ids: Vec<String> = Vec::new();
+
+    for name in &options.names {
+        let task_id = match crate::get_task_id_from_name(&list_id, name, &methods).await? {
             Some(task_id) => task_id,
             None => return Err(Error::BadRequest(json!("Bad task name"))),
         };
 
-    methods.delete(&list_id, &task_id).doit().await?;
+        task_ids.push(task_id);
+    }
+
+    for task_id in task_ids {
+        methods.delete(&list_id, &task_id).doit().await?;
+    }
 
     Ok(())
 }
