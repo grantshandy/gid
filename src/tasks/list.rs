@@ -11,7 +11,7 @@ use crate::{get_styled_table, Config};
 
 /// Show tasks.
 #[derive(FromArgs)]
-#[argh(subcommand, name = "show")]
+#[argh(subcommand, name = "list")]
 pub struct List {}
 
 #[derive(Tabled)]
