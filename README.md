@@ -33,7 +33,7 @@ $ cargo install --path="."
 
 On your first run it should provide you a URL to go to so you can log into your google account.
 
-## Configuration
+## Configure
 There is a configuration file at `~/.config/gid.toml`:
 ```toml
 default_list = "0" # the index or name that will be used by default by the tasks subcommand
