@@ -3,7 +3,7 @@
 
 A simple command line interface for Google Tasks.
 
-It's not very polished and there are a couple of problems with it so maybe I'll come back to this at some point.
+It's not very polished and there are a couple of problems (namely being named almost identical to git) with it so maybe I'll come back to this at some point.
 
 ```
 ~ ❯ gid tasks add "Make Grocery List"
